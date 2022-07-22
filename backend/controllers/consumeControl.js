@@ -25,7 +25,7 @@ export const createConsumo = async (req, res) => {
     }
 }
 
-export const getConsumo = async (req, res) => {
+export const getGateConsumo = async (req, res) => {
 
     const{id} = req.params
 

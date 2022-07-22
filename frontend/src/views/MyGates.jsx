@@ -4,6 +4,7 @@ import { useGetFetch } from "../hooks/getFetch"
 import AddGateModal from "../components/Modals/addGate"
 import UpGateModal from "../components/Modals/updateGate"
 import DelGateModal from "../components/Modals/deleteGate"
+import ConsumoDays from "../components/Modals/ConsumosInDays"
 import jwt_decode from"jwt-decode"
 
 const MyGates = () => {
@@ -11,9 +12,11 @@ const MyGates = () => {
   const{authToken} = useContext(UserContext)
 
   const[gates, setGates] = useState([])
+  const[dayz, someDayz] = useState("")
   const [showAdd, setShowAdd] = useState(false)
   const [showUpdate, setShowUpdate] = useState(false)
   const [showDelete, setShowDelete] = useState(false)
+  const [showCons, setShowCons] = useState(false)
   const [bodyt, setBodyt] = useState({})
 
   async function misLlaves (someToken){
@@ -48,6 +51,7 @@ const MyGates = () => {
       {showAdd && <AddGateModal open={setShowAdd}/>}
       {showUpdate && <UpGateModal open={setShowUpdate} body={bodyt}/>}
       {showDelete && <DelGateModal open={setShowDelete} body={bodyt}/>}
+      {showCons && <ConsumoDays open={setShowCons} body={bodyt} />}
 
       <button onClick={() => {setShowAdd(true)}} className="btn btn-dark">Agregar Llave</button>
 
@@ -69,6 +73,13 @@ const MyGates = () => {
             <td>{item.VEL}</td>
             <button onClick={() => {setShowUpdate(true); setBodyt(item)}} className="btn btn-dark">Editar Llave</button>
             <button onClick={() => {setShowDelete(true); setBodyt(item)}} className="btn btn-dark">Eliminar Llave</button>
+            <div className="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Obtener el consumo en dias hacia atras" 
+              value={dayz} onChange={(e) => someDayz(e.target.value)}/>
+              <div className="input-group-append">
+                <button onClick={() => {setShowCons(true); item.days=dayz; setBodyt(item)}} className="btn btn-outline-secondary" type="button">Buscar</button>
+              </div>
+            </div>
             
 					</tr>
           ))

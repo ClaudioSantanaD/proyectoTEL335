@@ -65,6 +65,7 @@ export const getAllConsumos = async (req, res) => {
         if(!someUser) res.status(400).json({message:'No se encuentra este usuario'})
 
         let consumos = await Uptake.find({ gate: { $in: someUser.myGates } })
+
         res.json(consumos)
 
     }catch(e){

@@ -13,7 +13,7 @@ import RequireAuth from './components/RequireAuth.jsx';
 import Consumos from './views/Consumos.jsx';
 import MyGates from './views/MyGates.jsx';
 import MyPosts from './views/MyPosts.jsx';
-import PostForo from './views/PostForo.jsx'
+import ShowPost from './views/showPost.jsx'
 import NotFound from './views/NotFound.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,7 +26,7 @@ root.render(
           <Route path='register' element={<Register />} />
           <Route path='login' element={<Login />} />
           <Route path='logout' element={<RequireAuth><Logout /></RequireAuth>}/>
-          <Route path='postForo/:id' element={<PostForo />} />
+          <Route path='postForo/:idPost' element={<ShowPost />} />
           <Route path='myPosts' element={<RequireAuth><MyPosts /></RequireAuth>} />
           <Route path='myGates' element={<RequireAuth><MyGates /></RequireAuth>} />
           <Route path='myConsumos' element={<RequireAuth><Consumos /></RequireAuth>} />

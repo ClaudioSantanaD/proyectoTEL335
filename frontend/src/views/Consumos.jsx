@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../context/userProvider"
 import { useGetFetch } from "../hooks/getFetch"
 import AddConsModal from "../components/Modals/addCons"
-import GetInRange from "../components/Modals/consInDays"
+import CleanHist from "../components/Modals/cleanHist"
 import jwt_decode from"jwt-decode"
 
 const Consumos = () => {
@@ -11,7 +11,7 @@ const Consumos = () => {
 
   const[uptakes, setUptakes] = useState([])
   const [showAdd, setShowAdd] = useState(false)
-  const [showInRange, setShowInRange] = useState(false)
+  const [showCleanHist, setShowCleanHist] = useState(false)
   //const [bodyt, setBodyt] = useState({})
 
   async function misConsumos (someToken){
@@ -22,13 +22,25 @@ const Consumos = () => {
         headers:{'auth-token':someToken},
         mode:'cors'
       })
-      return(await resGet.json())
+
+      let list = await resGet.json()
+
+      for(let i=0; i<list.length; i++){
+        let gateName = await fetch(`http://localhost:5000/consumo/gateById/${list[i]['_id']}`,{
+          method:'GET',
+          headers:{'auth-token':someToken},
+          mode:'cors'
+        })
+        list[i]['nameGate'] = await gateName.json()
+      }
+      return(list)
 
     }catch(error){
       return(error)
     }
 
   }
+  
 
   useEffect( () => {
     misConsumos(authToken).then(res => setUptakes(res))
@@ -44,10 +56,10 @@ const Consumos = () => {
     <>
       <h1>Consumos de {data.name}</h1>
       {showAdd && <AddConsModal open={setShowAdd}/>}
-      {showInRange && <GetInRange open={setShowInRange} />}
+      {showCleanHist && <CleanHist open={setShowCleanHist}/>}
 
       <button onClick={() => {setShowAdd(true)}} className="btn btn-dark">Agregar Consumo</button>
-      <button onClick={() => {showInRange(true)}} className="btn btn-dark">Consumo en dias</button>
+      <button onClick={() => {showCleanHist(true)}} className="btn btn-dark">Limpiar Consumos</button>
 
         <table className="table table-striped table-dark">
     	    <thead>
@@ -61,10 +73,10 @@ const Consumos = () => {
         <tbody>
           {uptakes.map(item => (
           <tr key={item._id}>
-				<td>{item.dateUse}</td>
-				<td>{item.timeUse}</td>
-				<td>{item.waterMili}</td>
-                <td>{item.gate}</td>   
+				    <td>{item.dateUse}</td>
+				    <td>{item.timeUse}</td>
+				    <td>{item.waterMili}</td>
+            <td>{item.nameGate}</td>   
 		</tr>
           ))
           }

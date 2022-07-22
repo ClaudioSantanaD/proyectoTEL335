@@ -9,6 +9,6 @@ router.get("/byUserLoged", verifyToken, getUserPosts)
 router.post("/create", verifyToken, createPost)
 router.put("/update", verifyToken, updatePost)
 router.delete("/delete", verifyToken, deletePost)
-router.get("byId/:id?", getThisPost)
+router.get("/byId/:id?", getThisPost)
 
 export default router

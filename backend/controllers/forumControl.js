@@ -41,9 +41,9 @@ export const deletePost = async (req, res) => {
     try{
 
         let somePost = await ForumPost.findOne({title:someTitle, author:req.user})
+        if(!somePost) res.status(400).json({message:'No existe este post'})
         let hisUser = await UserAqua.findByIdAndUpdate(req.user, {$pull: { myPosts: {$in: somePost._id}}})
         let deltPost = await ForumPost.findOneAndDelete({title:someTitle, author:req.user})
-        if(!somePost) res.status(400).json({message:'No existe este post'})
 
         res.json({message: "Se ha eliminado el post"})
 
@@ -96,6 +96,7 @@ export const getThisPost = async (req, res) => {
             title: somePost['title'],
             author: creator['username'],
             content: somePost['content'],
+            created_in: somePost['createdAt'],
             last_modified: somePost['updatedAt']
         })
     }catch(e){
